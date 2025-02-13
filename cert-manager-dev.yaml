@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: 'cert-manager-dev'
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jetstack.io
+    targetRevision: v1.16.3
+    helm:
+      parameters:
+        - name: crds.enabled
+          value: 'true'
+        - name: installCRDs
+          value: 'false'
+    chart: cert-manager
+  destination:
+    server: http://cluster-dev:8001
+    namespace: cert-manager
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+      - PruneLast=true
+      - PrunePropagationPolicy=background
+      - ApplyOutOfSyncOnly=true
