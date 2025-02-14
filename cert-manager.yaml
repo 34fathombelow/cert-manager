@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       name: 'cert-manager-{{.name}}'
-      lables: 
+      labels: 
         app: cert-manager
     spec:
       project: default
