@@ -31,7 +31,7 @@ spec:
              value: 'true'
            - name: installCRDs
              value: 'false'
-         chart: cert-manager
+        chart: cert-manager
       destination:
         namespace: cert-manager
         name: '{{.name}}'
