@@ -17,6 +17,8 @@ spec:
         version: v1.17.1
       - name: prod
         version: v1.16.3
+  syncPolicy:
+    applicationsSync: create-update
   template:
     metadata:
       name: 'cert-manager-{{.name}}'
