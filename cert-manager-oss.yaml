@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cert-manager
+  labels:
+    app: cert-manager
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - name: in-cluster
+        version: v1.17.1
+  syncPolicy:
+    applicationsSync: create-update
+  template:
+    metadata:
+      name: 'cert-manager-{{.name}}'
+      labels: 
+        app: cert-manager
+    spec:
+      project: default
+      source:
+        repoURL: https://charts.jetstack.io
+        targetRevision: '{{.version}}'
+        helm:
+         parameters:
+           - name: crds.enabled
+             value: 'true'
+           - name: installCRDs
+             value: 'false'
+        chart: cert-manager
+      destination:
+        namespace: cert-manager
+        name: '{{.name}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
